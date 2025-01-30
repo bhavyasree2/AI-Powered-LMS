@@ -4,30 +4,9 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { FaUserCircle, FaBook, FaRocket, FaFlask, FaSeedling, FaLaptopCode } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-
-// Animated Components
-const Card = ({ children, className }) => (
-  <motion.div 
-    initial={{ scale: 0.95, opacity: 0 }}
-    animate={{ scale: 1, opacity: 1 }}
-    whileHover={{ scale: 1.02 }}
-    className={`bg-white rounded-xl shadow-2xl transform transition-all duration-300 hover:shadow-xl ${className}`}
-  >
-    {children}
-  </motion.div>
-);
-
-const Button = ({ children, onClick, className }) => (
-  <motion.button
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    onClick={onClick}
-    className={`px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl 
-      hover:from-blue-700 hover:to-purple-700 transition-all duration-300 ${className}`}
-  >
-    {children}
-  </motion.button>
-);
+import Button from './components/ui/button';
+import Card from './components/ui/card';
+import AnimatedBackground from './components/ui/AnimatedBackground';
 
 // Course Data and Icons
 const courses = [
@@ -58,38 +37,6 @@ const courses = [
   }
 ];
 
-// Animated Background Elements
-const AnimatedBackground = () => (
-  <div className="absolute inset-0 overflow-hidden z-0">
-    {[...Array(10)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="absolute bg-gradient-to-r from-purple-100 to-blue-100 rounded-full blur-lg"
-        initial={{
-          scale: 0,
-          x: Math.random() * 100 - 50,
-          y: Math.random() * 100 - 50,
-          opacity: 0
-        }}
-        animate={{
-          scale: 1,
-          opacity: 0.3,
-          x: Math.random() * 100 - 50,
-          y: Math.random() * 100 - 50
-        }}
-        transition={{
-          duration: Math.random() * 5 + 5,
-          repeat: Infinity,
-          repeatType: 'reverse'
-        }}
-        style={{
-          width: `${Math.random() * 50 + 20}px`,
-          height: `${Math.random() * 50 + 20}px`,
-        }}
-      />
-    ))}
-  </div>
-);
 
 const Dashboard = () => {
   const [studentProgress] = useState([
