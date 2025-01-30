@@ -2,320 +2,389 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Link, Navigate, useNavigate } from 'react-router-dom';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle, FaBook, FaRocket, FaFlask, FaSeedling, FaLaptopCode } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
+// Animated Components
 const Card = ({ children, className }) => (
-  <div className={`bg-white rounded-lg shadow-lg ${className}`}>{children}</div>
-);
-
-const CardContent = ({ children, className }) => (
-  <div className={`p-4 ${className}`}>{children}</div>
+  <motion.div 
+    initial={{ scale: 0.95, opacity: 0 }}
+    animate={{ scale: 1, opacity: 1 }}
+    whileHover={{ scale: 1.02 }}
+    className={`bg-white rounded-xl shadow-2xl transform transition-all duration-300 hover:shadow-xl ${className}`}
+  >
+    {children}
+  </motion.div>
 );
 
 const Button = ({ children, onClick, className }) => (
-  <button
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
     onClick={onClick}
-    className={`px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 ${className}`}
+    className={`px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl 
+      hover:from-blue-700 hover:to-purple-700 transition-all duration-300 ${className}`}
   >
     {children}
-  </button>
+  </motion.button>
 );
 
-const Input = ({ type, placeholder, className, ...props }) => (
-  <input
-    type={type}
-    placeholder={placeholder}
-    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
-    {...props}
-  />
-);
+// Course Data and Icons
 const courses = [
   {
     name: 'Mathematics',
     description: 'This course covers fundamental mathematical concepts and problem-solving techniques.',
+    icon: <FaBook className="w-12 h-12 text-blue-600" />
   },
   {
     name: 'Physics',
     description: 'Learn the basics of physics, including mechanics, thermodynamics, and electromagnetism.',
+    icon: <FaRocket className="w-12 h-12 text-red-500" />
   },
   {
     name: 'Chemistry',
     description: 'A comprehensive course on chemistry, including organic and inorganic chemistry.',
+    icon: <FaFlask className="w-12 h-12 text-green-500" />
   },
   {
     name: 'Biology',
     description: 'Explore the world of biology, covering cellular biology, genetics, and ecology.',
+    icon: <FaSeedling className="w-12 h-12 text-emerald-600" />
   },
   {
     name: 'Computer Science',
     description: 'Dive into computer science, learning programming, algorithms, and data structures.',
-  },
+    icon: <FaLaptopCode className="w-12 h-12 text-purple-600" />
+  }
 ];
 
+// Animated Background Elements
+const AnimatedBackground = () => (
+  <div className="absolute inset-0 overflow-hidden z-0">
+    {[...Array(10)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute bg-gradient-to-r from-purple-100 to-blue-100 rounded-full blur-lg"
+        initial={{
+          scale: 0,
+          x: Math.random() * 100 - 50,
+          y: Math.random() * 100 - 50,
+          opacity: 0
+        }}
+        animate={{
+          scale: 1,
+          opacity: 0.3,
+          x: Math.random() * 100 - 50,
+          y: Math.random() * 100 - 50
+        }}
+        transition={{
+          duration: Math.random() * 5 + 5,
+          repeat: Infinity,
+          repeatType: 'reverse'
+        }}
+        style={{
+          width: `${Math.random() * 50 + 20}px`,
+          height: `${Math.random() * 50 + 20}px`,
+        }}
+      />
+    ))}
+  </div>
+);
+
 const Dashboard = () => {
-  const [studentProgress, setStudentProgress] = useState([
+  const [studentProgress] = useState([
     { course: 'Mathematics', progress: 80 },
     { course: 'Physics', progress: 70 },
     { course: 'Chemistry', progress: 90 },
   ]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Student Progress Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+      <AnimatedBackground />
+      <h1 className="text-4xl font-bold mb-8 text-gray-800 relative z-10">
+        📊 Learning Progress
+      </h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
         {studentProgress.map((item, index) => (
-          <Card key={index} className="p-4">
-            <CardContent className="flex flex-col items-center">
-              <div className="w-24 h-24 mb-4">
+          <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+            <div className="flex flex-col items-center">
+              <div className="w-32 h-32 mb-4">
                 <CircularProgressbar
                   value={item.progress}
-                  text={`${item.course}`}
+                  text={`${item.progress}%`}
                   styles={buildStyles({
-                    textSize: '10px',
-                    pathColor: item.progress > 75 ? '#4CAF50' : '#FFEB3B',
-                    textColor: '#333',
-                    trailColor: '#d6d6d6',
+                    pathColor: item.progress > 75 ? '#4F46E5' : '#F59E0B',
+                    textColor: '#1F2937',
+                    trailColor: '#E5E7EB',
+                    textSize: '24px'
                   })}
                 />
               </div>
-              <p className="text-lg font-semibold">{item.progress}% Completed</p>
-            </CardContent>
+              <div className="flex items-center gap-3">
+                {courses.find(c => c.name === item.course)?.icon}
+                <h3 className="text-2xl font-bold text-gray-800">{item.course}</h3>
+              </div>
+            </div>
           </Card>
         ))}
       </div>
     </div>
   );
 };
-const Home = () => {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Welcome to Our Learning Platform</h1>
-      <p className="mb-4">Our platform offers a wide range of courses to help you succeed in your academic journey. Explore available courses and enhance your knowledge.</p>
-      <h2 className="text-xl font-semibold mb-4">Available Courses</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map((course, index) => (
-          <Card key={index} className="p-4">
-            <CardContent>
-              <h3 className="text-lg font-semibold">{course.name}</h3>
-              <p>{course.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+
+const Home = () => (
+  <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+    <AnimatedBackground />
+    <div className="relative z-10">
+      <header className="text-center mb-12">
+        <motion.h1 
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          className="text-5xl font-bold mb-6 text-gray-800"
+        >
+          🚀 Welcome to Edvance
+        </motion.h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+         AI-Powered Learning Management System.Master new skills with our interactive courses and hands-on projects. 
+          Start your learning journey today!
+        </p>
+      </header>
+
+      <section className="mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course, index) => (
+            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4">
+                  {course.icon}
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{course.name}</h3>
+                <p className="text-gray-600">{course.description}</p>
+                <Button className="mt-6">Explore Course</Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </section>
     </div>
-  );
-};
+  </div>
+);
 
 const Courses = () => {
   const [enrolledCourses, setEnrolledCourses] = useState([]);
 
-  const handleOptCourse = (course) => {
-    setEnrolledCourses([...enrolledCourses, course]);
+  const handleOptCourse = (courseName) => {
+    setEnrolledCourses([...enrolledCourses, courseName]);
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Courses Available</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {courses.map((course, index) => (
-          <Card key={index} className="p-4">
-            <CardContent>
-              <h2 className="text-lg font-semibold">{course.name}</h2>
-              <p>{course.description}</p>
-              {!enrolledCourses.includes(course.name) ? (
-                <Button className="mt-2" onClick={() => handleOptCourse(course.name)}>
-                  Opt for Course
-                </Button>
-              ) : (
-                <>
-                  <p className="mt-2">Progress: 50%</p> {/* Replace with actual progress */}
-                  <div className="mt-4">
-                    <h3>Course Videos</h3>
-                    <ul>
-                      <li>Video 1: Introduction</li>
-                      <li>Video 2: Advanced Concepts</li>
-                    </ul>
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Available Courses</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {courses.map((course, index) => (
+            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4">{course.icon}</div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">{course.name}</h3>
+                <p className="text-gray-600 mb-4">{course.description}</p>
+                {!enrolledCourses.includes(course.name) ? (
+                  <Button onClick={() => handleOptCourse(course.name)}>
+                    Enroll Now
+                  </Button>
+                ) : (
+                  <div className="w-full">
+                    <div className="h-2 bg-gray-200 rounded-full mb-4">
+                      <div 
+                        className="h-full bg-green-500 rounded-full" 
+                        style={{ width: '50%' }}
+                      ></div>
+                    </div>
+                    <p className="text-gray-600">Course Progress: 50%</p>
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+                )}
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
+const Assignments = () => {
+  const [assignments] = useState([
+    { course: 'Mathematics', status: 'Pending', dueDate: '2024-03-01' },
+    { course: 'Physics', status: 'Submitted', dueDate: '2024-03-05' },
+    { course: 'Chemistry', status: 'Graded', dueDate: '2024-03-10' }
+  ]);
+
+  return (
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Assignments</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {assignments.map((assignment, index) => (
+            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+              <div className="flex flex-col">
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  {assignment.course}
+                </h3>
+                <p className="text-gray-600 mb-2">Due: {assignment.dueDate}</p>
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-sm ${
+                    assignment.status === 'Submitted' ? 'bg-green-100 text-green-800' :
+                    assignment.status === 'Graded' ? 'bg-blue-100 text-blue-800' :
+                    'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {assignment.status}
+                  </span>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Tests = () => {
+  const [tests] = useState([
+    { course: 'Mathematics', score: 'A', date: '2024-02-15' },
+    { course: 'Physics', score: 'B+', date: '2024-02-20' },
+    { course: 'Chemistry', score: 'A-', date: '2024-02-25' }
+  ]);
+
+  return (
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Test Results</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {tests.map((test, index) => (
+            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+              <div className="flex flex-col">
+                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                  {test.course}
+                </h3>
+                <p className="text-gray-600 mb-2">Date: {test.date}</p>
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl font-bold text-blue-600">
+                    {test.score}
+                  </span>
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const ProfilePage = ({ onLogout }) => {
   const navigate = useNavigate();
-  const [profileData, setProfileData] = useState({
+  const [profile] = useState({
     name: 'John Doe',
-    email: 'john.doe@example.com',
-    courses: [
-      { course: 'Mathematics', progress: 80, assignmentSubmitted: true, testGrade: 'A' },
-      { course: 'Physics', progress: 70, assignmentSubmitted: false, testGrade: 'B+' },
-      { course: 'Chemistry', progress: 90, assignmentSubmitted: true, testGrade: 'A+' },
-    ],
+    email: 'john@futurelearn.com',
+    joined: '2024-01-01'
   });
 
-  const handleLogout = () => {
-    onLogout();
-    navigate('/login');
-  };
-
   return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Profile</h1>
-      <div className="mb-4">
-        <p><strong>Name:</strong> {profileData.name}</p>
-        <p><strong>Email:</strong> {profileData.email}</p>
-      </div>
-      <div className="mb-4">
-        <h2 className="font-semibold">Courses In Progress:</h2>
-        {profileData.courses.map((course, index) => (
-          <Card key={index} className="p-4 mb-4">
-            <CardContent>
-              <h3 className="text-lg font-semibold">{course.course}</h3>
-              <div className="w-full bg-gray-200 h-2 mb-4">
-                <div
-                  className="bg-blue-500 h-full"
-                  style={{ width: `${course.progress}%` }}
-                ></div>
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative">
+      <AnimatedBackground />
+      <div className="relative z-10">
+        <h1 className="text-4xl font-bold mb-8 text-gray-800">Profile</h1>
+        <Card className="p-6 bg-white/90 backdrop-blur-sm max-w-2xl mx-auto">
+          <div className="space-y-4">
+            <div className="flex items-center gap-4">
+              <FaUserCircle className="w-16 h-16 text-gray-700" />
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">{profile.name}</h2>
+                <p className="text-gray-600">{profile.email}</p>
               </div>
-              <p><strong>Progress:</strong> {course.progress}%</p>
-              <p><strong>Assignment Submitted:</strong> {course.assignmentSubmitted ? 'Yes' : 'No'}</p>
-              <p><strong>Test Grade:</strong> {course.testGrade}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-      <Button onClick={handleLogout} className="mt-4">Logout</Button>
-    </div>
-  );
-};
-
-const AssignmentPage = () => {
-  const [assignmentStatus, setAssignmentStatus] = useState([
-    { course: 'Mathematics', assignmentSubmitted: false },
-    { course: 'Physics', assignmentSubmitted: false },
-    { course: 'Chemistry', assignmentSubmitted: false },
-  ]);
-
-  const handleUploadAssignment = (index) => {
-    // Simulating assignment upload
-    const newAssignmentStatus = [...assignmentStatus];
-    newAssignmentStatus[index].assignmentSubmitted = true;
-    setAssignmentStatus(newAssignmentStatus);
-  };
-
-  return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Assignments</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {assignmentStatus.map((item, index) => (
-          <Card key={index} className="p-4">
-            <CardContent>
-              <h2 className="text-lg font-semibold">{item.course}</h2>
-              {!item.assignmentSubmitted ? (
-                <Button onClick={() => handleUploadAssignment(index)} className="mt-2">Upload Assignment</Button>
-              ) : (
-                <p className="text-green-600 mt-2">Assignment Submitted</p>
-              )}
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
-  );
-};
-
-
-const TestPage = () => {
-  const [testStatus, setTestStatus] = useState([
-    { course: 'Mathematics', testTaken: false, grade: '' },
-    { course: 'Physics', testTaken: false, grade: '' },
-    { course: 'Chemistry', testTaken: false, grade: '' },
-  ]);
-
-  const handleTakeTest = (index) => {
-    // Simulating taking a test and receiving a grade
-    const newTestStatus = [...testStatus];
-    newTestStatus[index].testTaken = true;
-    newTestStatus[index].grade = 'A'; // Replace with actual test logic
-    setTestStatus(newTestStatus);
-  };
-
-  return (
-    <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">Tests</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {testStatus.map((item, index) => (
-          <Card key={index} className="p-4">
-            <CardContent>
-              <h2 className="text-lg font-semibold">{item.course}</h2>
-              {!item.testTaken ? (
-                <Button onClick={() => handleTakeTest(index)} className="mt-2">Take Test</Button>
-              ) : (
-                <p className="text-green-600 mt-2">Grade: {item.grade}</p>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+            </div>
+            <div className="border-t pt-4">
+              <p className="text-gray-600">Member since: {profile.joined}</p>
+              <Button onClick={() => {
+                onLogout();
+                navigate('/');
+              }} className="mt-6 w-full">
+                Logout
+              </Button>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   );
 };
 
 const LoginPage = ({ onLogin }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    onLogin('John Doe');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin();
     navigate('/dashboard');
   };
 
-  if (isLoggedIn) return <Navigate to="/dashboard" replace />;
-
   return (
-    <div className="p-6 flex justify-center items-center h-screen">
-      <Card className="p-6 w-full max-w-md">
-        <CardContent>
-          <h1 className="text-xl font-bold mb-4">Login</h1>
-          <Input type="email" placeholder="Email" className="mb-4" />
-          <Input type="password" placeholder="Password" className="mb-4" />
-          <Button onClick={handleLogin} className="w-full">Login</Button>
-          <p className="mt-4 text-center text-sm">
-            Don't have an account? <Link to="/register" className="text-blue-500">Register</Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
-
-const RegisterPage = () => {
-  const navigate = useNavigate();
-
-  const handleRegister = () => {
-    navigate('/login');
-  };
-
-  return (
-    <div className="p-6 flex justify-center items-center h-screen">
-      <Card className="p-6 w-full max-w-md">
-        <CardContent>
-          <h1 className="text-xl font-bold mb-4">Register</h1>
-          <Input type="text" placeholder="Full Name" className="mb-4" />
-          <Input type="email" placeholder="Email" className="mb-4" />
-          <Input type="password" placeholder="Password" className="mb-4" />
-          <Button onClick={handleRegister} className="w-full">Register</Button>
-          <p className="mt-4 text-center text-sm">
-            Already have an account? <Link to="/login" className="text-blue-500">Login</Link>
-          </p>
-        </CardContent>
+    <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative flex items-center justify-center">
+      <AnimatedBackground />
+      <Card className="p-8 bg-white/90 backdrop-blur-sm w-full max-w-md relative z-10">
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-3xl font-bold mb-8 text-center text-gray-800"
+        >
+          {isRegistering ? 'Create Account' : 'Welcome Back'}
+        </motion.h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {isRegistering && (
+            <div>
+              <label className="block text-gray-700 mb-2">Full Name</label>
+              <input 
+                type="text" 
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required 
+              />
+            </div>
+          )}
+          <div>
+            <label className="block text-gray-700 mb-2">Email</label>
+            <input 
+              type="email" 
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required 
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 mb-2">Password</label>
+            <input 
+              type="password" 
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required 
+            />
+          </div>
+          <Button type="submit" className="w-full">
+            {isRegistering ? 'Register' : 'Login'}
+          </Button>
+        </form>
+        <p className="text-center mt-6 text-gray-600">
+          {isRegistering ? 'Already have an account? ' : 'Need an account? '}
+          <button 
+            type="button"
+            className="text-blue-600 hover:underline"
+            onClick={() => setIsRegistering(!isRegistering)}
+          >
+            {isRegistering ? 'Login here' : 'Register now'}
+          </button>
+        </p>
       </Card>
     </div>
   );
@@ -323,56 +392,56 @@ const RegisterPage = () => {
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
-
-  const handleLogin = (name) => {
-    setUserName(name);
-    setIsLoggedIn(true);
-    
-  };
-
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserName('');
-  };
 
   return (
     <Router>
       <div className="container mx-auto p-6">
-        <nav className="flex justify-between items-center bg-gray-800 p-4 rounded-lg mb-6">
-          <Link to="/" className="text-white font-semibold text-lg">Home</Link>
-          <div className="flex items-center space-x-4">
+        <motion.nav 
+          className="flex justify-between items-center bg-white/80 backdrop-blur-md p-4 rounded-2xl mb-8 shadow-lg sticky top-4 z-50"
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+        >
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Edvance
+          </Link>
+          <div className="flex items-center gap-8">
             {isLoggedIn ? (
               <>
-                
-                <Link to="/courses" className="text-white">Courses</Link>
-                <Link to="/test" className="text-white">Tests</Link>
-                <Link to="/assignments" className="text-white">Assignments</Link>
-                <Link to="/profile" className="text-white flex items-center space-x-2">
-                  <FaUserCircle size={24} className="text-white" />
-                </Link>
+                <NavLink to="/courses" icon="📚" label="Courses" />
+                <NavLink to="/assignments" icon="📝" label="Assignments" />
+                <NavLink to="/tests" icon="📊" label="Tests" />
+                <NavLink to="/profile" icon={<FaUserCircle className="text-2xl text-gray-700" />} />
               </>
             ) : (
-              <>
-                <Link to="/login" className="text-white">Login/Register</Link>
-              </>
+              <NavLink to="/login" icon="🔑" label="Get Started" />
             )}
           </div>
-        </nav>
+        </motion.nav>
 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/profile" element={<ProfilePage onLogout={handleLogout} />} />
           <Route path="/courses" element={<Courses />} />
-          <Route path="/test" element={<TestPage />} /> 
-          <Route path="/assignments" element={<AssignmentPage />} /> 
+          <Route path="/assignments" element={<Assignments />} />
+          <Route path="/tests" element={<Tests />} />
+          <Route path="/profile" element={<ProfilePage onLogout={() => setIsLoggedIn(false)} />} />
+          <Route path="/login" element={<LoginPage onLogin={() => setIsLoggedIn(true)} />} />
         </Routes>
       </div>
     </Router>
   );
 };
+
+const NavLink = ({ to, icon, label }) => (
+  <motion.div whileHover={{ scale: 1.05 }}>
+    <Link 
+      to={to} 
+      className="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors"
+    >
+      <span className="text-xl">{icon}</span>
+      {label && <span className="font-medium">{label}</span>}
+    </Link>
+  </motion.div>
+);
 
 export default App;
