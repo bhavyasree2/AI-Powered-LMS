@@ -32,7 +32,7 @@ const Assignments = () => {
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Assignments</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {assignments.map((assignment, index) => (
-            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+            <Card key={index} className="p-6 bg-white/80">
               <div className="flex flex-col">
                 <h3 className="text-2xl font-bold text-gray-800 mb-2">
                   {assignment.course}

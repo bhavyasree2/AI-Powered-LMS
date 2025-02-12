@@ -18,7 +18,7 @@ const LoginPage = ({ onLogin }) => {
   return (
     <div className="p-8 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen relative flex items-center justify-center">
       <AnimatedBackground />
-      <Card className="p-8 bg-white/90 backdrop-blur-sm w-full max-w-md relative z-10">
+      <Card className="p-8 bg-white/80 w-full max-w-md relative z-10">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}

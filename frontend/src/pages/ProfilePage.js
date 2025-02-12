@@ -71,7 +71,7 @@ const ProfilePage = ({ onLogout }) => {
       <div className="relative z-10">
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Profile</h1>
         <div className="max-w-[80%] mx-auto">
-          <Card className="p-6 bg-white/90 backdrop-blur-sm w-full">
+          <Card className="p-6 bg-white/80 w-full">
             <div className="space-y-6">
               <div className="flex items-center gap-4">
                 <FaUserCircle className="w-16 h-16 text-gray-700" />
@@ -85,7 +85,7 @@ const ProfilePage = ({ onLogout }) => {
                 <h2 className="text-2xl font-bold mb-4 text-gray-800">Learning Progress</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {studentProgress.map((item, index) => (
-                    <Card key={index} className="p-4 bg-white/80 backdrop-blur-sm">
+                    <Card key={index} className="p-4 bg-white/80">
                       <div className="flex flex-col items-center">
                         <div className="w-24 h-24 mb-2">
                           <CircularProgressbar
@@ -134,7 +134,7 @@ const ProfilePage = ({ onLogout }) => {
                     const storedGrades = JSON.parse(localStorage.getItem('grades')) || {};
                     const grade = storedGrades[testTitle];
                     return (
-                      <Card key={testTitle} className="p-4 mb-2 bg-white/80 backdrop-blur-sm">
+                      <Card key={testTitle} className="p-4 mb-2 bg-white/80 ">
                         <div className="flex flex-col">
                           <h3 className="text-xl font-bold text-gray-800 mb-1">{testTitle}</h3>
                           <span className="text-2xl font-bold text-blue-600">{grade}%</span>

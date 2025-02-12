@@ -53,7 +53,7 @@ const Home = () => (
       <section className="mb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses.map((course, index) => (
-            <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm">
+            <Card key={index} className="p-6 bg-white/80">
               <div className="flex flex-col items-center text-center">
                 <div className="mb-4">
                   {course.icon}

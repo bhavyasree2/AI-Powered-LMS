@@ -87,7 +87,7 @@ const CoursePage = () => {
         </div>
 
         {course.topics.map((topic, index) => (
-          <Card key={index} className="p-6 bg-white/90 backdrop-blur-sm mb-4">
+          <Card key={index} className="p-6 bg-white/80 mb-4">
             <div className="flex flex-col">
               <h2
                 className="text-2xl font-bold text-gray-800 mb-2 cursor-pointer hover:underline"

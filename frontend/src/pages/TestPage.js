@@ -85,7 +85,7 @@ const TestPage = () => {
       <div className="relative z-10">
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Test: {title}</h1>
         {questions.length > 0 && (
-          <Card key={currentQuestion} className="p-6 bg-white/90 backdrop-blur-sm mb-4">
+          <Card key={currentQuestion} className="p-6 bg-white/80 mb-4">
             <div className="flex flex-col">
               <h3 className="text-2xl font-bold text-gray-800 mb-2">
                 {questions[currentQuestion].question}
