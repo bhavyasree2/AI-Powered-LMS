@@ -1,0 +1,2 @@
+GET   /courses   controllers.CourseController.getAllCourses
+GET   /users     controllers.UserController.getAllUsers
