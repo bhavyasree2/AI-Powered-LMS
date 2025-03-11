@@ -10,6 +10,7 @@ class CourseController @Inject()(cc: ControllerComponents, courseService: Course
 
   def getAllCourses = Action {
     val courses = courseService.getAllCourses
-    Ok(Json.toJson(courses))
+    Ok(Json.toJson(courses)).as("application/json")
   }
 }
+
