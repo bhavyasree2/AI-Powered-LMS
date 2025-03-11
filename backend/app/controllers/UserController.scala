@@ -10,6 +10,6 @@ class UserController @Inject()(cc: ControllerComponents, userService: UserServic
 
   def getAllUsers = Action {
     val users = userService.getAllUsers
-    Ok(Json.toJson(users))
+    Ok(Json.toJson(users)).as("application/json")
   }
 }
